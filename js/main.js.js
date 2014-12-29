@@ -2,9 +2,9 @@
 var selectable_container = document.querySelector('ul#selectable'),
 	selectable_items = selectable_container.getElementsByTagName('li'),
 	selection_area = document.querySelector('div#selection_area');
-	selected_data = '',
 	attr = "data",
 	countClicks = 1;
+selected_data = [];
 
 //COUNT CLICKS
 selectable_container.onclick = function(){
@@ -77,17 +77,16 @@ mousemove = function(e){
 			right: selectable_items[i].getBoundingClientRect().left + selectable_items[i].getBoundingClientRect().width, 
 			bottom: selectable_items[i].getBoundingClientRect().top + selectable_items[i].getBoundingClientRect().height
         };
-        var data = selectable_items[i].getAttribute(attr) + ', ';
+        var data = selectable_items[i].getAttribute(attr);
         if(intersect(selection_area.dimensions, selectable_items[i].dimensions)) {		//If two boxes are in touch add the li to array
           	selectable_items[i].className = 'selected';
-          	if (selected_data.indexOf(data) == -1) {
-          		selected_data += data;
+            console.log(data);
+          	if(selected_data.indexOf(data) === -1) {
+            	selected_data.push(data);
           	}
     	}else{		//Else delete from array the li's are out of the selectionArea
     		selectable_items[i].className = '';
-    		if(selected_data.indexOf(data)!=-1){
-	    		selected_data = selected_data.slice(0, selected_data.indexOf(data)) + selected_data.slice(selected_data.indexOf(data)+data.length, selected_data.length-1);
-	    	}
+    		selected_data.splice(selected_data.indexOf(data), 1);
     	}
     };
 	console.log(selected_data);
