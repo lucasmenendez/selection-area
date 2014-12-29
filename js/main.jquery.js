@@ -1,10 +1,10 @@
 $(document).ready(function(){
 	//Variables
 		//ID's
-		ul = $('ul');
-		li = $('li');
+		ul = $('ul#selectable');
+		li = $('ul#selectable li');
 		page = $(document);
-		selection = $('div.selection');
+		selection = $('div#selection_area');
 
 		files = [];		//Array
 		var countClicks=1, countHover=1; 	//Count of turns

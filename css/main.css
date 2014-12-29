@@ -1,4 +1,4 @@
-div.selection{
+div#selection_area{
 	display: none;
 	position: absolute;
 	border: 1px dotted #000;
@@ -7,14 +7,13 @@ div.selection{
 	height: 0;
 	z-index: 10000000000000;
 }
-table tr td{width: 150px; border:1px solid black;}
-ul{
+ul#selectable{
 	width: 100%;
 	margin: 0;
 	padding: 0;
 	height: auto;
 }
-ul li{
+ul#selectable li{
 	height: 20px;
 	border: 1px solid #ccc;
 	width: 100%;
@@ -23,3 +22,4 @@ ul li{
 	padding: 0;
 	text-align: center;
 }
+ul#selectable li.selected{background: #ccc;}
