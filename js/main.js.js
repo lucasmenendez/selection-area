@@ -4,7 +4,7 @@ var selectable_container = document.querySelector('ul#selectable'),
 	selection_area = document.querySelector('div#selection_area');
 	attr = "data",
 	countClicks = 1;
-selected_data = [];
+
 
 //COUNT CLICKS
 selectable_container.onclick = function(){
@@ -23,6 +23,7 @@ selectable_container.onclick = function(){
 //MOUSE DOWN FUNCTION
 mousedown = function(e){
 	e.preventDefault();
+	selected_data = [];
 	//Initial cursor position
 	startX = e.pageX, startY = e.pageY;
 	//New parameters when cursor is moved	
@@ -77,19 +78,9 @@ mousemove = function(e){
 			right: selectable_items[i].getBoundingClientRect().left + selectable_items[i].getBoundingClientRect().width, 
 			bottom: selectable_items[i].getBoundingClientRect().top + selectable_items[i].getBoundingClientRect().height
         };
-        var data = selectable_items[i].getAttribute(attr);
-        if(intersect(selection_area.dimensions, selectable_items[i].dimensions)) {		//If two boxes are in touch add the li to array
-          	selectable_items[i].className = 'selected';
-            console.log(data);
-          	if(selected_data.indexOf(data) === -1) {
-            	selected_data.push(data);
-          	}
-    	}else{		//Else delete from array the li's are out of the selectionArea
-    		selectable_items[i].className = '';
-    		selected_data.splice(selected_data.indexOf(data), 1);
-    	}
+        var class_name = (intersect(selection_area.dimensions, selectable_items[i].dimensions)) ? 'selected' : '';		//If two boxes are in touch add the li to array
+        selectable_items[i].className = class_name;
     };
-	console.log(selected_data);
 };
 
 //CANCEL SELECTION FUNCTION
@@ -98,6 +89,11 @@ cancel_selection = function(e){
 	document.removeEventListener('mousedown', mousedown, false);
     selection_area.style.display = 'none';
     document.removeEventListener('mouseup', cancel_selection, false);
+    for (var i = 0; i < selectable_items.length; i++) {
+		if (selectable_items[i].className == "selected") {
+			selected_data.push(selectable_items[i].getAttribute(attr));
+		}
+	}
     document.addEventListener('mousedown', mousedown, false);
 }
 
