@@ -1,0 +1,86 @@
+<head>
+    <title>SelectableArea Demo</title>
+    <link rel="stylesheet" type="text/css" href="default.css">
+    <style>
+        #my-custom-area {
+            background: rgba(0,0,0,0.2);
+            border: 1px dotted #555;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <img class="logo" src="https://raw.githubusercontent.com/lucasmenendez/selection-area/master/assets/images/logo.svg">
+        <h1><a href="https://github.com/lucasmenendez/selection-area" target="_blank">SelectionArea</a></h1>
+        <p class="description">Simple JavaScript seletion area to any DOM container element. Checkout the <a href="https://github.com/lucasmenendez/selection-area/blob/master/README.md">documentation</a>.</p>
+    </header>
+    <section class="main">
+        <div class="demo">
+            <h2>Demo</h2>
+            <div class="parent" data-selectable=".child">
+                <div class="child" data-number="1">1</div>
+                <div class="child" data-number="2">2</div>
+                <div class="child" data-number="3">3</div>
+                <div class="child" data-number="4">4</div>
+                <div class="child" data-number="5">5</div>
+                <div class="child" data-number="6">6</div>
+                <div class="child" data-number="7">7</div>
+                <div class="child" data-number="8">8</div>
+                <div class="child" data-number="9">9</div>
+                <div class="child" data-number="10">10</div>
+                <div class="child" data-number="11">11</div>
+                <div class="child" data-number="12">12</div>
+                <div class="child" data-number="13">13</div>
+                <div class="child" data-number="14">14</div>
+                <div class="child" data-number="15">15</div>
+                <div class="child" data-number="16">16</div>
+                <div class="child" data-number="17">17</div>
+                <div class="child" data-number="18">18</div>
+                <div class="child" data-number="19">19</div>
+                <div class="child" data-number="20">20</div>
+            </div>
+        </div>
+
+        <div class="example">
+            <h2>Style</h2>
+            <pre class="code">
+#my-custom-area {
+    background: rgba(0,0,0,0.2);
+    border: 1px dotted #555;
+}
+            </pre>
+
+            <h2>Javascript</h2>
+            <pre class="code">
+let config = {
+    container: document.querySelector('.parent'),
+    areaId: 'my-custom-area',
+    targetSelector: '.child',
+    property: 'data-number',
+    callback: selection => {
+        if (selection.length == 0) alert("empty selection");
+        else alert(selection);
+    }
+}
+
+let selectable = new SelectionArea(config);
+            </pre>
+        </div>
+    </section>
+    <script type="text/javascript" src="/dist/selection-area.js"></script>
+    <script type="text/javascript">
+        let config = {
+            container: document.querySelector('.parent'),
+            areaId: 'my-custom-area',
+            targetSelector: '.child',
+            property: 'data-number',
+            callback: selection => {
+                if (selection.length == 0) alert("empty selection");
+                else alert(selection);
+            }
+        }
+        
+        let selectable = new SelectionArea(config);
+    </script>
+</body>
