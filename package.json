@@ -1,6 +1,17 @@
 {
   "name": "selection-area",
-  "version": "1.0.2",
+  "version": "1.0.3",
+  "keywords": [
+    "list",
+    "items",
+    "selection",
+    "selectable",
+    "items-selection",
+    "selectable-list",
+    "selection-area",
+    "selectable-area",
+    "selectable-items"
+  ],
   "description": "Selection Area for html elements, defined by user.",
   "main": "dist/selection-area.js",
   "scripts": {
