@@ -45,6 +45,7 @@ import { SelectionArea } from 'selection-area';
 ```
 
 ## Demo
+Checkout the demo [here](http://lucasmenendez.github.io/selection-area/).
 
 ## Documentation
 
