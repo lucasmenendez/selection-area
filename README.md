@@ -1,4 +1,4 @@
-<img src="assets/images/logo.svg" width="80">
+<img src="https://raw.githubusercontent.com/lucasmenendez/selection-area/master/assets/images/logo.svg?sanitize=true" width="80">
 
 # Selection Area
 
