@@ -37,6 +37,10 @@ Import dist version:
 ```html
 <script src="/node_modules/webproletarian/dist/selection-area.js"></script>
 ```
+or
+```html
+<script src="https://unpkg.com/selection-area"></script>
+```
 
 Or import with ES6 `import`:
 
