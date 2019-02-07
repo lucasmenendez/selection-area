@@ -2,7 +2,7 @@
 
 # Selection Area
 
-[![npm version](https://img.shields.io/badge/npm%20package-1.0.2-green.svg)](https://www.npmjs.com/package/selection-area)
+[![npm version](https://img.shields.io/badge/npm%20package-1.0.3-green.svg)](https://www.npmjs.com/package/selection-area)
 
 Simple JavaScript seletion area to any DOM container element.
 
