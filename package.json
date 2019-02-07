@@ -1,11 +1,8 @@
 {
-  "name": "selectable-area",
-  "version": "1.0.0",
+  "name": "selection-area",
+  "version": "1.0.1",
   "description": "Selection Area for html elements, defined by user.",
-  "main": "dist/selectable.min.js",
-  "directories": {
-    "test": "test"
-  },
+  "main": "dist/selection-area.js",
   "scripts": {
     "dev": "webpack --watch --config build/webpack.config.js",
     "start": "npm run dev",
@@ -13,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/lucasmenendez/selectable"
+    "url": "github.com/lucasmenendez/selection-area"
   },
   "author": "Lucas Menendez (Github @lucasmenendez)",
   "license": "MIT",
