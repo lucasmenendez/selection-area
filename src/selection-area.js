@@ -65,8 +65,8 @@ export class SelectionArea {
      */
     listenMouse() {
         this.container.addEventListener('mousedown', e => this.initArea(e));
-        document.addEventListener('mousemove', e => this.updateArea(e));
-        document.addEventListener('mouseup', e => this.removeArea(e));
+        this.container.addEventListener('mousemove', e => this.updateArea(e));
+        this.container.addEventListener('mouseup', e => this.removeArea(e));
     }
 
     /**
