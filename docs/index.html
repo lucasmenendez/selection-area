@@ -1,23 +1,59 @@
 <head>
     <title>SelectableArea Demo</title>
     <link rel="stylesheet" type="text/css" href="default.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!--<script type="text/javascript" src="https://unpkg.com/selection-area"></script>-->
+    <script type="text/javascript" src="../dist/selection-area.js"></script>
     <style>
         #my-custom-area {
-            background: rgba(0,0,0,0.2);
-            border: 1px dotted #555;
+            background: rgba(52, 152, 219, 0.2);
+            border: 2px dotted #2980b9;
         }
     </style>
+
+    <script>
+        function start() {
+            let status = document.querySelector('#status');
+            status.innerText = "started";
+            status.classList.remove("stopped");
+        }
+
+        function stop() {
+            let status = document.querySelector('#status');
+            status.innerText = "stopped";
+            status.classList.add("stopped");
+        }
+    </script>
 </head>
 
 <body>
     <header class="header">
         <img class="logo" src="https://raw.githubusercontent.com/lucasmenendez/selection-area/master/assets/images/logo.svg?sanitize=true">
-        <h1><a href="https://github.com/lucasmenendez/selection-area" target="_blank">SelectionArea</a></h1>
+       
+        <h1 class="title">
+            <a href="https://github.com/lucasmenendez/selection-area" target="_blank">SelectionArea</a>
+        </h1>
+        
         <p class="description">Simple JavaScript seletion area to any DOM container element. Checkout the <a href="https://github.com/lucasmenendez/selection-area/blob/master/README.md">documentation</a>.</p>
     </header>
     <section class="main">
         <div class="demo">
             <h2>Demo</h2>
+            
+            <div class="controls">
+                <p id="message">SelectionArea is <span id="status">started</span></p>
+
+                <button id="start" onclick="start()">
+                    <i class="fas fa-play"></i> 
+                    Start
+                </button>
+                <button id="stop" onclick="stop()">
+                    <i class="fas fa-stop"></i>
+                    Stop
+                </button>
+            </div>
+
             <div class="parent" data-selectable=".child">
                 <div class="child" data-number="1">1</div>
                 <div class="child" data-number="2">2</div>
@@ -43,11 +79,11 @@
         </div>
 
         <div class="example">
-            <h2>Style</h2>
+            <h2>Custom styles</h2>
             <pre class="code">
 #my-custom-area {
-    background: rgba(0,0,0,0.2);
-    border: 1px dotted #555;
+    background: rgba(52, 152, 219, 0.2);
+    border: 2px dotted #2980b9;
 }
             </pre>
 
@@ -55,33 +91,39 @@
             <pre class="code">
 let config = {
     container: document.querySelector('.parent'),
-    areaId: 'my-custom-area',
-    targetSelector: '.child',
-    property: 'data-number',
+    area: 'my-custom-area',
+    targets: '.child',
+    touchable: true,
+    autostart: true,
     callback: selection => {
         if (selection.length == 0) alert("empty selection");
-        else alert(selection);
+        else alert(`${ selection.length } items selected`);
     }
 }
 
 let selectable = new SelectionArea(config);
+
+document.getElementById("start").addEventListener("click", e => selectable.start());
+document.getElementById("stop").addEventListener("click", e => selectable.stop());
             </pre>
         </div>
     </section>
-    <script type="text/javascript" src="https://unpkg.com/selection-area"></script>
-    <!--<script type="text/javascript" src="../dist/selection-area.js"></script>-->
     <script type="text/javascript">
         let config = {
             container: document.querySelector('.parent'),
-            areaId: 'my-custom-area',
-            targetSelector: '.child',
-            property: 'data-number',
+            area: 'my-custom-area',
+            targets: '.child',
+            touchable: true,
+            autostart: true,
             callback: selection => {
                 if (selection.length == 0) alert("empty selection");
-                else alert(selection);
+                else alert(`${ selection.length } items selected`);
             }
         }
         
         let selectable = new SelectionArea(config);
+
+        document.getElementById("start").addEventListener("click", e => selectable.start());
+        document.getElementById("stop").addEventListener("click", e => selectable.stop());
     </script>
 </body>

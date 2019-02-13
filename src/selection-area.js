@@ -1,7 +1,12 @@
-import Area from "./area";
+import Validate from './configuration';
+import Area from './area';
 
-const defaultAreaId = 'selectionArea';
-const defaultProperty = 'data-value';
+const initMouse = 'mousedown';
+const updateMouse = 'mousemove';
+const endMouse = 'mouseup';
+const initTouch = 'touchstart';
+const updateTouch = 'touchmove';
+const endTouch = 'touchend';
 
 /**
  * SelectionArea class listen mouse movements to create and adapt a selection 
@@ -9,27 +14,53 @@ const defaultProperty = 'data-value';
  * content of defined property of that childs. 
  * @param  {Object} config Config object
  * @param  {Element} config.container DOM Element to make selectable
- * @param  {string} config.targetSelector DOM selector of selectables childs
- * @param  {string} [config.areaId] DOM ID for selection area to define styles
- * @param  {string} [config.property] Property to get from selected childs
+ * @param  {string} [config.area='selectionArea'] DOM ID for selection area to define styles
+ * @param  {string} [config.area.id='selectionArea'] DOM ID for selection area to define styles
+ * @param  {Object} [config.area.class] DOM class for selection area to define styles
+ * @param  {String} config.targets DOM selector of selectables childs
+ * @param  {Array} config.targets List of selectable childs DOM selectors
+ * @param  {boolean} [config.touchable=false] Listen to touch instead mouse 
+ * events, default `false`
+ * @param  {boolean} [config.autostart=false] Control autostart selection area 
+ * events, default `false`
  * @param  {function} [config.callback] Function to call when selection ends
  * @example 
  * import { SelectionArea } from 'selection-area';
  * 
- * let container = document.querySelector('.parent');
- * let targetSelector = '.child';
- * let callback = selection => {
- *      if (selection.length == 0) console.warn("empty selection");
- *      else console.log(selection);
+ * let config = {
+ *     container: document.querySelector('.parent'),
+ *     area: 'areaElemId' || {
+ *         id: 'areaElemId',
+ *         class: 'areaElemClass'
+ *     },
+ *     targets: [ '.targetSelector1', '.targetSelector2'],
+ *     touchable: true,
+ *     autostart: true,
+ *     callback: selection => {
+ *         if (selection.length == 0) console.warn("empty selection");
+ *         else console.log(selection);
+ *     }
  * }
  * 
- * let selectable = new Selectable({ container, targetSelector, callback });
+ * let selectable = new SelectionArea(config);
  * @class
  */
 export class SelectionArea {
     constructor(config) {
-        this.checkConfig(config);
-        this.listenMouse();
+        let validate = new Validate(config);
+        
+        try {
+            this.container = validate.container(config);
+            this.targets = validate.targets(config);
+            this.areaAttributes = validate.areaAttrs(config);
+            this.touchable = validate.touchable(config);
+            this.autostart = validate.autostart(config);
+            this.callback = validate.callback(config);
+        } catch (e) {
+            throw e;
+        }
+
+        if (this.autostart) this.start();
     }
     
     /**
@@ -37,88 +68,113 @@ export class SelectionArea {
      * @param  {function} callback Function defined as callback by user
      */
     onSelect(callback) {
-        this.callback = callback;
+        if (typeof this.callback !== 'function') this.callback = callback;
     }
     
     /**
-     * Function that checks if all required configuration are provided as param,
-     * extract whole configurayions inside it and stores into current instance. 
-     * @param  {Onject} config Configuration object definition
+     * start function attachs to container the listeners on defined triggers.
      */
-    checkConfig(config) {
-        if (Object.prototype.hasOwnProperty.call(config, 'container')) {
-            this.container = config.container;
-        } else throw 'element target not provided';
+    start() {
+        this.container.addEventListener(initMouse, this);
+        this.container.addEventListener(updateMouse, this);
+        this.container.addEventListener(endMouse, this);
 
-        if (Object.prototype.hasOwnProperty.call(config, 'targetSelector')) {
-            this.targets = this.container.querySelectorAll(config.targetSelector);
-            if (this.targets.length == 0) throw 'no selectable childs found';
-        } else throw 'target selector not provided';
-
-        this.areaId = Object.prototype.hasOwnProperty.call(config, 'areaId') ? config.areaId : defaultAreaId;
-        this.prop = Object.prototype.hasOwnProperty.call(config, 'property') ? config.property : defaultProperty;
-        this.callback = Object.prototype.hasOwnProperty.call(config, 'callback') ? config.callback : null;
+        if (this.touchable) {
+            this.container.addEventListener(initTouch, this);
+            this.container.addEventListener(updateTouch, this);
+            this.container.addEventListener(endTouch, this);
+        }
     }
 
     /**
-     * Sets custom listeners to mouse down, move and up events.
+     * stop function removes the listeners from current container.
      */
-    listenMouse() {
-        this.container.addEventListener('mousedown', e => this.initArea(e));
-        this.container.addEventListener('mousemove', e => this.updateArea(e));
-        this.container.addEventListener('mouseup', e => this.removeArea(e));
+    stop() {
+        this.container.removeEventListener(initMouse, this);
+        this.container.removeEventListener(updateMouse, this);
+        this.container.removeEventListener(endMouse, this);
+
+        if (this.touchable) {
+            this.container.removeEventListener(initTouch, this);
+            this.container.removeEventListener(updateTouch, this);
+            this.container.removeEventListener(endTouch, this);
+        }
     }
 
     /**
-     * initArea funtion clears current selection, creates new area with ID 
-     * provided and instances it into current container.
-     * @param  {MouseEvent} e 'mousedown' event metadata
+     * handleEvent extends JavaScript Event interface as custom functions 
+     * dispatcher getting current position considering touch events.
+     * @param  {Event} e Event data
+     * @ignore
      */
-    initArea(e) {
+    handleEvent(e) {
         e.preventDefault();
+        
+        let pos = this.touchable && e.targetTouches && e.targetTouches.length ? e.targetTouches[0] : e;
+        let [ x, y ] = [ pos.pageX, pos.pageY ];
 
-        this.data = [];
-        this.area = new Area(this.areaId, e.pageX, e.pageY);
+        switch (e.type) {
+            case initMouse:
+            case initTouch:
+                this.init(x, y);
+                break;
+            case updateMouse:
+            case updateTouch:
+                this.update(x, y);
+                break;
+            case endMouse:
+            case endTouch:
+                this.end(x, y);
+                break;
+        }
+    }
+
+    
+    /**
+     * init funtion clears current selection, creates new area with ID provided 
+     * and instances it into current container.
+     * @param  {number} [x] Current position on x axis
+     * @param  {number} [y] Current position on y axis
+     * @ignore
+     */
+    init(x, y) {
+        this.selected = [];
+        this.area = new Area(this.areaAttributes, x, y);
         this.area.instance(this.container);
     }
 
     /**
-     * updateArea captures current mouse position and updates current selection
-     * area with that position, resizing area and moving it.
-     * @param  {MouseEvent} e 'mousemove' event metadata.
+     * update receives current position and updates current selection area with 
+     * that position, resizing area and moving it.
+     * @param  {number} [x] Current position on x axis
+     * @param  {number} [y] Current position on y axis
+     * @ignore
      */
-    updateArea(e) {
-        e.preventDefault();
+    update(x, y) {
         if (this.area) {
-            let [ x, y ] = [ e.pageX, e.pageY ];
             this.area.resize(x, y);
             this.area.move(x, y);
         }
     }
 
     /**
-     * removeArea extract selected items, destroy current selection area and
+     * end extract selected items, destroy current selection area and
      * invokes callback passing values of selected items.
-     * @param  {MouseEvent} e 'mouseup' event metadata.
+     * @ignore
      */
-    removeArea(e) {
-        e.preventDefault();
+    end() {
         if (this.area) {
-            this.checkIntersections();
-            this.area.destroy();
-            if (this.callback) this.callback(this.data);
-        }
-    }
+            let nodes = [];
+            this.targets.forEach(selector => {
+                let childs = this.container.querySelectorAll(selector);
+                Array.prototype.slice.call(childs).forEach(target => nodes.push(target));
+            });
 
-    /**
-     * checkIntersecionts iterates over all posible targets and checks if
-     * current selection area intersects with each of them. Stores all included
-     * values of user defined child property.
-     */
-    checkIntersections() {
-        this.targets.forEach(t => {
-            let val = t.getAttribute(this.prop);
-            if (this.area.isOver(t) && this.data.indexOf(val) === -1) this.data.push(val);
-        });
+            this.selected = nodes.filter(node => this.area.isOver(node) && this.selected.indexOf(node) === -1);
+
+            this.area.destroy();
+            this.area = null;
+            if (this.callback) this.callback(this.selected);
+        }
     }
 }

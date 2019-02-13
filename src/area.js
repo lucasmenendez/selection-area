@@ -1,17 +1,22 @@
+const defaultId = 'selectionArea';
 const defaultStyle = 'position: absolute; z-index: 1000; top: 0; left: 0;';
 
 /**
  * Area class includes all required functions to emulate the area behaviour.
  * Constructor initializes main params of area Element and stores 
  * area DOM Element ID
- * @param  {string} id Area Element DOM ID
+ * @param  {Object} def Area object definition
+ * @param  {string} def.id Area DOM Element ID definition
+ * @param  {string} [def.class] Area DOM Element class definition
  * @param  {number} [x=0] Initial area position on x axis, default 0
  * @param  {number} [y=0] Initial area position on y axis, default 0
  * @class
+ * @ignore
  */
 export default class Area {
-    constructor(id,  x = 0, y = 0) {
-        this.id = id;
+    constructor(def,  x = 0, y = 0) {
+        this.id = Object.prototype.hasOwnProperty.call(def, 'id') ? def.id : defaultId;
+        this.class = Object.prototype.hasOwnProperty.call(def, 'class') ? def.class : false;
         this.x = x;
         this.y = y;
         this.w = 0;
@@ -28,9 +33,10 @@ export default class Area {
         let areaElem = document.createElement('div');
         areaElem.setAttribute('id', this.id);
         areaElem.setAttribute('style', defaultStyle);
-        parent.appendChild(areaElem);
+        if (this.class) areaElem.setAttribute('class', this.class);
 
-        this.parent = parent;
+        parent.appendChild(areaElem);
+        this.parent = parent;        
         this.elem = document.getElementById(this.id);
     }
 

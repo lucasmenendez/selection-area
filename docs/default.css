@@ -1,44 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Helvetica Neue,Helvetica,sans-serif;
+    font-family: 'Open Sans', Helvetica Neue,Helvetica,sans-serif;
 }
+
+::-webkit-scrollbar { display: none; }
 
 html, body {
     width: 100%;
     height: 100%;
+    margin-bottom: 100px;
 }
 
 .header {
-    display: inline-block;
     margin: 50px auto;
-    width: 100%;
+    width: 80%;
+    max-width: 1000px;
     height: auto;
     text-align: center;
+    padding: 50px 0;
     border-bottom: 1px solid #ddd;
 }
 
-.header a { color: #444; }
+.header .title a { 
+    color: #444; 
+    text-decoration: none;
+}
 
 .header .logo {
     display: inline-block;
     vertical-align: top;
     width: 80px;
     height: auto;
-    margin: 20px auto;
+}
+
+.header .title {
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    height: auto;
+    margin: 20px auto 40px;
+}
+
+.header .title a
+.header .title a:visited { 
+    color: #444; 
+    text-decoration: none;
 }
 
 .header .description {
     display: inline-block;
     vertical-align: top;
-    margin: 20px auto;
 }
+
+.header .description a,
+.header .description a:visited { 
+    color: #2980b9; 
+    text-decoration: underline;
+}
+
+
 
 .main {
     display: inline-block;
     vertical-align: top;
-    width: 100%;
+    width: 90%;
+    max-width: 1500px;
+    margin: 0 auto;
     
     display: flex;
     flex-wrap: nowrap;
@@ -51,9 +82,57 @@ html, body {
     display: inline-block;
     vertical-align: top;
     padding: 0 2%;
+    overflow: hidden;
 }
 
-.main .demo { flex-grow: 1; }
+.main .demo { 
+    text-align: center;
+    flex-grow: 1;
+}
+
+.main .demo h2 { text-align: left; }
+
+.main .demo #message { 
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    height: auto;
+    color: #888;
+    font-size: 14px;
+}
+
+.main .demo #message #status { 
+    color: #27ae60;
+    font-weight: bold;
+}
+.main .demo #message #status.stopped { color: #c0392b; }
+
+.main .demo button#start,
+.main .demo button#stop {
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 15vh;
+    margin: 20px 10px 50px;
+    font-size: 14px;
+    font-family: inherit;
+    color: white;
+    background: #2ecc71;
+    border: none;
+    box-shadow: 0px 10px 30px -10px rgba(0,0,0,0.75);
+    outline: none;
+    cursor: pointer;
+    transition: background .2s ease-in-out, transform .1s ease-in-out;
+}
+.main .demo button#stop { background: #e74c3c; }
+.main .demo button#start:hover { background: #27ae60; }
+.main .demo button#stop:hover { background: #c0392b; }
+.main .demo button#start:active,
+.main .demo button#stop:active { transform: translateY(2px); }
+
+.main .demo button i { margin-right: 5px }
 
 .main .demo .parent {
     display: inline-block; 
@@ -75,12 +154,13 @@ html, body {
     width: 20%;
     height: 50px;
     line-height: 50px;
-    margin: 10px ;
-    border: 1px solid black;
-    color: black;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 15vh;
+    color: #555;
     text-align: center;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    box-shadow: 0px 10px 30px -10px rgba(0,0,0,0.75);
 }
 
 .main .example .code {
@@ -88,13 +168,15 @@ html, body {
     vertical-align: top;
     width: auto;
     height: auto;
-    margin: 15px 0;
+    margin: 15px 0 50px;
     padding: 25px 25px 10px;
     background: #222;
     color: white;
     font-family: consolas;
-    max-width: 95%;
+    max-width: 100%;
     overflow: auto;
+    border-radius: 1vh;
+    box-shadow: 0px 10px 30px -10px rgba(0,0,0,0.75);
 }
 
 @media screen and (max-width: 1000px) {
