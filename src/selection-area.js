@@ -45,7 +45,7 @@ const endTouch = 'touchend';
  * let selectable = new SelectionArea(config);
  * @class
  */
-export class SelectionArea {
+class SelectionArea {
     constructor(config) {
         let validate = new Validate(config);
         
@@ -178,3 +178,5 @@ export class SelectionArea {
         }
     }
 }
+
+export default SelectionArea;

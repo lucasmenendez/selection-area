@@ -1,6 +1,6 @@
 {
   "name": "selection-area",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "keywords": [
     "list",
     "items",
@@ -15,11 +15,13 @@
     "touch-items"
   ],
   "description": "Simple JavaScript mouse & touch seletion area to any DOM container element.",
-  "main": "dist/selection-area.js",
+  "main": "dist/selection-area.cjs.js",
+	"module": "dist/selection-area.esm.js",
+	"browser": "dist/selection-area.umd.js",
   "scripts": {
-    "dev": "webpack --watch --config build/webpack.config.js",
-    "start": "npm run dev",
-    "build": "webpack --mode production --config build/webpack.config.js"
+    "build": "NODE_ENV=production rollup -c build/rollup.config.js",
+		"dev": "rollup -w -c build/rollup.config.js",
+		"start": "npm run dev"
   },
   "repository": {
     "type": "git",
@@ -27,12 +29,15 @@
   },
   "author": "Lucas Menendez (Github @lucasmenendez)",
   "license": "MIT",
-  "dependencies": {
-    "@babel/core": "^7.2.2",
-    "babel-loader": "^8.0.5",
-    "uglifyjs-webpack-plugin": "^2.1.1",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.1.14"
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/runtime": "^7.7.7",
+    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-node-resolve": "^6.0.0",
+    "rollup": "^1.27.14",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }
